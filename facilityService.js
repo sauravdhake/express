@@ -64,6 +64,13 @@ app.get("/api/v1/products", handlerExport(
   }), mongoose)
 );
 
+app.delete("/api/v1/product/serial_no/:serial_no", handlerExport(
+  ProductController.deleteProduct({
+    ProductModel: ModelManager.get('Product'),
+    PaginationManager
+  }), mongoose)
+);
+
   app.use((err, req, res, next) => {
     console.log({
       type: err.type,

@@ -132,3 +132,29 @@ module.exports.getAllProducts = ({ ProductModel,PaginationManager }) => async (e
     }
   }
 }
+
+module.exports.deleteProduct = ({ ProductModel }) => async (event, context) => {
+  try {
+    console.log({service: "facility-service", logMessage: "deleteProduct API initialised", stage: event.requestContext.stage});
+
+    const serial_noPath = event.pathParameters.serial_no
+    
+     // we not deleting any product only changing isactive flag
+    await ProductModel.updateMany(
+      {"serial_no":serial_noPath},
+      { $set: {isactive:false} }
+    )
+
+    console.log({service: "facility-service", logMessage: {body: {message: " deleteProduct"}, api: 'deleteProduct'}, status: "201", stage: event.requestContext.stage});
+    return {
+      status: 201,
+      body:{message: "product deleted successfully"}
+    }
+  } catch (err) {
+    console.log({service: "facility-service", status: "400", stage: event.requestContext.stage});
+    return {
+      status: 400,
+      body: { message: err.message }
+    }
+  }
+}
