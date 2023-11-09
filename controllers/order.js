@@ -45,7 +45,7 @@ module.exports.createOrder = ({ OrderModel, ProductModel}) => async (event) => {
 
     ]
     
-    const orderWithProducts = await OrderModel.aggregate([...aggQuery, { $count: "total" }])
+    const orderWithProducts = await OrderModel.aggregate([...aggQuery])
 
 
     // let array = [];
@@ -53,10 +53,10 @@ module.exports.createOrder = ({ OrderModel, ProductModel}) => async (event) => {
     //       let remainingQty = item.qty - orderWithProducts.qty
     //   return array.push({id:item._id, quantity:remainingQty})
     // })
+    let id = orderWithProducts[0].associateproducts._id
+    let product = await ProductModel.findOne({ _id: ObjectId(id)});
 
-    product = await ProductModel.findOne({ _id: orderWithProducts.associateproducts._id});
-
-    product.qty = product.qty - orderWithProducts.qty;
+    product.qty = product.qty - orderWithProducts[0].qty;
     
     product.save();
 
@@ -73,7 +73,7 @@ module.exports.createOrder = ({ OrderModel, ProductModel}) => async (event) => {
       body: order
     }
   } catch (err) {
-    console.log({service: "facility-service", facilityId: event.pathParameters.facilityId, requestBody: JSON.parse(event.body), logMessage: {message:err.message, api: 'updateFacility'}, status: "400", stage: event.requestContext.stage});
+    console.log({service: "facility-service", requestBody: JSON.parse(event.body), logMessage: {message:err.message, api: 'updateFacility'}, status: "400", stage: event.requestContext.stage});
     return {
       status: 400,
       body: { message: err.message }
