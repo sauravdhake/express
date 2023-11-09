@@ -9,7 +9,7 @@ const mongoose = require("mongoose")
 var { ObjectId } = mongoose.mongo;
 const DataStore = require("./package/data-store")
 const dataStore = new DataStore(mongoose)
-//const constantManager = require('@securra/constant-manager')
+
 dataStore
 .connect(process.env.DB_URI)
 .debug(false)
@@ -52,6 +52,12 @@ app.post("/api/v1/product", handlerExport(
   }), mongoose,JSON.parse(fs.readFileSync('./schema-validators/create-product.json')))
 );
 
+app.patch("/api/v1/product/serial_no/:serial_no", handlerExport(
+  ProductController.updateProduct({
+    ProductModel: ModelManager.get('Product'),
+    PaginationManager
+  }), mongoose,JSON.parse(fs.readFileSync('./schema-validators/update-address.json')))
+);
 
 
   app.use((err, req, res, next) => {

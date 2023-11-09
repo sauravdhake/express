@@ -1,0 +1,17 @@
+{
+  "title": "Address",
+  "description": "Address of a user",
+  "type": "object",
+  "properties": {
+    "qty":{
+      "description": "Product quantity",
+      "type": "number"
+    },
+    "price":{
+      "description": "Product price",
+      "type": "string"
+    }
+  },
+  "required": ["price", "qty"],
+  "additionalProperties": false
+}

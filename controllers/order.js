@@ -75,7 +75,7 @@ module.exports.createOrder = ({ OrderModel, ProductModel}) => async (event) => {
       { "_id": ObjectId(id)},
       { $set: { qty : remainingQty} }
     )
-   // console.log({service: "order-service", requestBody: payload, stage: event.requestContext.stage, logMessage: {message: 'Facility Updated Successfully!', api: 'updateFacility'}});
+   
 
     return {
       status: 200,
