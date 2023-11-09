@@ -1,6 +1,6 @@
 var { ObjectId } = require("mongoose").mongo
 
-//"creator" Function links facility with pracitioner and given role
+
 module.exports.createProduct = ({ ProductModel }) => async (event, context) => {
   try {
     console.log({service: "facility-service", logMessage: "createProduct API initialised", stage: event.requestContext.stage});
