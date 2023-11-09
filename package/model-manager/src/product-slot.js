@@ -5,7 +5,7 @@ module.exports = (mongoose) => {
   
   const ProductSlotsSchema = new Schema({
     
-    serial_no: { type: String ,unique: true},
+    serial_no: { type: String },
     product_name: { type: String},
     description: { type: String },
     price: { type: String },

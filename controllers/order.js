@@ -2,24 +2,35 @@ var { ObjectId } = require("mongoose").mongo
 let moment = require("moment");
 var ObjectId = require("mongodb").ObjectId;
 const { v4: uuidv4 } = require('uuid');
-const axios = require('axios');
-const fileUpload = process.env.FILE_UPLOAD_URL;
 
 module.exports.createOrder = ({ OrderModel, ProductModel}) => async (event) => {
   try {
     console.log({service: "order-service", logMessage: "createOrder API initialised", stage: event.requestContext.stage});
-   
-    
-    const payload = JSON.parse(event.body)
-    
-    order = new OrderModel({
-      serial_no: payload.serial_no,
-      user_id: uuidv4(),
-      qty:payload.qty,
-      
-  })
 
-  order = await order.save()
+    const payload = JSON.parse(event.body)
+
+    const allOrders = await OrderModel.find({serial_no:payload.serial_no})
+     
+  //   let flag = true;
+  //  await allOrders.map((item)=>{
+  //     if(item.serial_no === payload.serial_no){
+  //         flag = true  
+  //     }
+  //   });
+
+    let order;
+    //if order entry not there
+    if(allOrders.length === 0){
+       order = new OrderModel({
+        product_id:payload.product_id, 
+        serial_no: payload.serial_no,
+        user_id: uuidv4(),
+        qty:payload.qty,
+        
+      })
+
+      order = await order.save()
+  }
 
   const filter = { serial_no:payload.serial_no }
 
@@ -56,24 +67,22 @@ module.exports.createOrder = ({ OrderModel, ProductModel}) => async (event) => {
     let id = orderWithProducts[0].associateproducts._id
     let product = await ProductModel.findOne({ _id: ObjectId(id)});
 
-    product.qty = product.qty - orderWithProducts[0].qty;
+    let remainingQty = product.qty - orderWithProducts[0].qty;
     
-    product.save();
+    //product.save();
 
-
-    // await ProductModel.updateMany(
-    //   { "_id": {$in:productIds}},
-    //   { $set: { qty : qty - } },
-    //   { multi: true }
-    // )
+    await ProductModel.updateOne(
+      { "_id": ObjectId(id)},
+      { $set: { qty : remainingQty} }
+    )
    // console.log({service: "order-service", requestBody: payload, stage: event.requestContext.stage, logMessage: {message: 'Facility Updated Successfully!', api: 'updateFacility'}});
 
     return {
       status: 200,
-      body: order
+      body: {message:"order booked successffully"}
     }
   } catch (err) {
-    console.log({service: "facility-service", requestBody: JSON.parse(event.body), logMessage: {message:err.message, api: 'updateFacility'}, status: "400", stage: event.requestContext.stage});
+    console.log({service: "facility-service", requestBody: JSON.parse(event.body), logMessage: {message:err.message, api: 'createOrder'}, status: "400", stage: event.requestContext.stage});
     return {
       status: 400,
       body: { message: err.message }

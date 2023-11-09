@@ -4,15 +4,19 @@ module.exports = (mongoose) => {
    
     
     const OrderSlotsSchema = new Schema({
-      
-      serial_no: { 
-        type: String,
+      product_id :{
+        type: Schema.Types.ObjectId,
         ref: "ProductSlot",
         required: true,
-        index: true},
+        index: true,
+      },
+      serial_no: { 
+        type: String,
+      },
     
       user_id: { type: String },
       qty: { type: Number,required: true },
+
      
     },
     {
