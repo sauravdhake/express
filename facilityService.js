@@ -32,6 +32,7 @@ app.use(express.urlencoded({ extended: false }));
 
 const OrderController = require("./controllers/order")
 
+//decreasing product quantity according to order quantity
 app.post("/api/v1/order", handlerExport(
   OrderController.createOrder({
     OrderModel: ModelManager.get('Order'),
@@ -42,7 +43,7 @@ app.post("/api/v1/order", handlerExport(
 
 
 const ProductController = require("./controllers/product")
-
+//this api add new product and serial no. shoud be unique to add product
 app.post("/api/v1/product", handlerExport(
   ProductController.createProduct({
     ProductModel: ModelManager.get('Product'),
@@ -50,6 +51,7 @@ app.post("/api/v1/product", handlerExport(
   }), mongoose,JSON.parse(fs.readFileSync('./schema-validators/create-product.json')))
 );
 
+//this api update the product details including increasing qty and price//note=> serial no cannot be change
 app.patch("/api/v1/product/serial_no/:serial_no", handlerExport(
   ProductController.updateProduct({
     ProductModel: ModelManager.get('Product'),
@@ -57,6 +59,7 @@ app.patch("/api/v1/product/serial_no/:serial_no", handlerExport(
   }), mongoose,JSON.parse(fs.readFileSync('./schema-validators/update-address.json')))
 );
 
+ //GET api/v1/products?pageSize=10,pageNo=1 // paginated list of product // pageSize=10
 app.get("/api/v1/products", handlerExport(
   ProductController.getAllProducts({
     ProductModel: ModelManager.get('Product'),
@@ -64,6 +67,7 @@ app.get("/api/v1/products", handlerExport(
   }), mongoose)
 );
 
+//delete will mark the product as isactive to false //isactive by default is true
 app.delete("/api/v1/product/serial_no/:serial_no", handlerExport(
   ProductController.deleteProduct({
     ProductModel: ModelManager.get('Product'),
