@@ -19,7 +19,7 @@ module.exports.createOrder = ({ OrderModel, ProductModel}) => async (event) => {
   //   });
 
     let order;
-    //if order entry not there
+    //if order entry not available then only create record
     if(allOrders.length === 0){
        order = new OrderModel({
         product_id:payload.product_id, 
@@ -34,7 +34,7 @@ module.exports.createOrder = ({ OrderModel, ProductModel}) => async (event) => {
 
   const filter = { serial_no:payload.serial_no }
 
-  //qty change logic
+  //below steps for decreasing qty of products according to order qty
     let aggQuery = [
       {
         $match: filter
@@ -66,11 +66,11 @@ module.exports.createOrder = ({ OrderModel, ProductModel}) => async (event) => {
     // })
     let id = orderWithProducts[0].associateproducts._id
     let product = await ProductModel.findOne({ _id: ObjectId(id)});
-
+    //subtraction
     let remainingQty = product.qty - orderWithProducts[0].qty;
     
-    //product.save();
-
+   
+    //updating remaining qty in product collection
     await ProductModel.updateOne(
       { "_id": ObjectId(id)},
       { $set: { qty : remainingQty} }

@@ -9,11 +9,14 @@ module.exports.createProduct = ({ ProductModel }) => async (event, context) => {
     
     const allProducts = await ProductModel.find()
 
+    //checking payload serial_no is already available in product collection or not
     allProducts.map((item)=>{
       if(item.serial_no === payload.serial_no){
           throw new Error(`serial_no  ${payload.serial_no} already exist`)
       }
     });
+
+    //creating new record in product collection
     product = new ProductModel({
       serial_no: payload.serial_no,
       product_name: payload.product_name,
@@ -47,12 +50,15 @@ module.exports.updateProduct = ({ ProductModel }) => async (event, context) => {
     const allProducts = await ProductModel.find()
      
     let productIds = []
+
+    //collecting product_Id 
     allProducts.map((item)=>{
       if(item.serial_no === serial_noPath){
           return productIds.push(item._id)
       }
     });
 
+    //updating qty and price for perticuler product_id
     await ProductModel.updateMany(
       {"_id":{$in:productIds}},
       { $set: {qty:payload.qty , price:payload.price} }
@@ -139,7 +145,7 @@ module.exports.deleteProduct = ({ ProductModel }) => async (event, context) => {
 
     const serial_noPath = event.pathParameters.serial_no
     
-     // we not deleting any product only changing isactive flag
+     // we not deleting any product only updating isactive flag
     await ProductModel.updateMany(
       {"serial_no":serial_noPath},
       { $set: {isactive:false} }
