@@ -72,7 +72,7 @@ module.exports.updateProduct = ({ ProductModel }) => async (event, context) => {
   }
 }
 
-module.exports.getAllProducts = ({ ProductModel }) => async (event, context) => {
+module.exports.getAllProducts = ({ ProductModel,PaginationManager }) => async (event, context) => {
   try {
     console.log({service: "facility-service", logMessage: "updateProduct API initialised", stage: event.requestContext.stage});
     const queryStringParameters = event.queryStringParameters || {};
@@ -94,40 +94,20 @@ module.exports.getAllProducts = ({ ProductModel }) => async (event, context) => 
         filter["product_name"] = searchvalue 
       }
 
-      if (FromDate && ToDate) {
-        filter["dateValue"] = {
-          $gte:moment(FromDate , standardDateFormat).toDate(),
-          $lte:moment(ToDate , standardDateFormat).toDate()
-        };
-      }
       // Setting up Aggregation Pipeline
       const orderAgg = [
-        {
-            $addFields: {              
-              dateValue :  { $dateFromString: { dateString : "$date"}}
-            },
-        },
         
         {
-              $addFields: {
-                product_name: {
-                  $toLower: { $concat: [
-                            "$product_name"
-                        ]
-                    },
-                }
-            }
+          $match:filter
         },
         {
          $sort : sort 
         },
-        {
-          $match:{...filter}
-        }
+        
       ];
 
     return Promise.all([ProductModel.aggregate([...orderAgg, { $skip: skip }, { $limit: pageSize }]),
-    BookedSlotModel.aggregate([...orderAgg, { $count: "total" }])]).then(async (values) => {
+    ProductModel.aggregate([...orderAgg, { $count: "total" }])]).then(async (values) => {
       let data = await PaginationManager.getPaginateResponse({ totalCount: values[1]?.length ? values[1][0].total : 0, pageSize, pageNumber, payload: values[0] })
 
       console.log({
