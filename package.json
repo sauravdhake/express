@@ -1,0 +1,34 @@
+{
+  "name": "express",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sample": "echo \"Lerna included here\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "local": "nodemon -r dotenv/config index.js",
+    "dev": "sls offline start --stage dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sauravdhake/express.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "express": "~4.16.1",
+    "mime": "^2.5.2",
+    "moment": "^2.29.4",
+    "mongoose": "^5.13.16",
+    "nanoid": "^3.1.20"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.22"
+  },
+  "bugs": {
+    "url": "https://github.com/sauravdhake/express/issues"
+  },
+  "homepage": "https://github.com/sauravdhake/express#readme"
+}
