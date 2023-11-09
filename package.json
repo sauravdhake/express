@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "sample": "echo \"Lerna included here\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "local": "nodemon -r dotenv/config index.js",
     "dev": "sls offline start --stage dev"
   },
@@ -23,10 +23,12 @@
     "moment": "^2.29.4",
     "mongoose": "^5.13.16",
     "nanoid": "^3.1.20",
+    "supertest": "^6.3.3",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
     "dotenv": "^16.0.3",
+    "jest": "^29.7.0",
     "nodemon": "^2.0.22"
   },
   "bugs": {

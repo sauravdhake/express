@@ -14,8 +14,6 @@ dataStore
 .connect(process.env.DB_URI)
 .debug(false)
 
-
-
 //Pagination package
 const {PaginationManager}  = require("./package/api-pagination/index");  
 const ModelManager = require("./package/model-manager/index");
@@ -59,6 +57,12 @@ app.patch("/api/v1/product/serial_no/:serial_no", handlerExport(
   }), mongoose,JSON.parse(fs.readFileSync('./schema-validators/update-address.json')))
 );
 
+app.get("/api/v1/products", handlerExport(
+  ProductController.getAllProducts({
+    ProductModel: ModelManager.get('Product'),
+    PaginationManager
+  }), mongoose)
+);
 
   app.use((err, req, res, next) => {
     console.log({
