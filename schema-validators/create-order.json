@@ -2,7 +2,11 @@
   "title": "Order",
   "description": "A Order",
   "type": "object",
-  "properties": {
+  "properties": { 
+    "product_id":{
+      "description": "order serial no.",
+      "type": "string"
+    },
     "serial_no":{
       "description": "order serial no.",
       "type": "string"
