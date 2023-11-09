@@ -74,7 +74,7 @@ module.exports.updateProduct = ({ ProductModel }) => async (event, context) => {
 
 module.exports.getAllProducts = ({ ProductModel,PaginationManager }) => async (event, context) => {
   try {
-    console.log({service: "facility-service", logMessage: "updateProduct API initialised", stage: event.requestContext.stage});
+    console.log({service: "facility-service", logMessage: "getAllProducts API initialised", stage: event.requestContext.stage});
     const queryStringParameters = event.queryStringParameters || {};
       const pageSize = parseInt(queryStringParameters.pageSize || 10);
       const pageNumber = parseInt(queryStringParameters.pageNumber || 1)
