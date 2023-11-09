@@ -35,7 +35,7 @@ module.exports = (executor, mongoose, schema) => async (req, res, next) => {
       headers: req.headers,
       files: req?.files,
       requestContext: { stage: "" },
-      activeUser,
+     
     };
 
     

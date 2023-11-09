@@ -1,0 +1,43 @@
+{
+  "title": "Product",
+  "description": "A Product",
+  "type": "object",
+  "properties": {
+    "product_name":{
+      "description": "Product product_name",
+      "type": "string"
+    },
+    "description":{
+      "description": "Product description",
+      "type": "string"
+    },
+    "serial_no":{
+      "description": "Product serial_no.",
+      "type": "string"
+    },
+
+    "price":{
+      "description": "Product price",
+      "type": "string"
+    },
+
+    "isactive":{
+      "description": "Product isactive",
+      "type": "boolean"
+    },
+
+    "qty":{
+      "description": "Product quantity",
+      "type": "number"
+    }
+  },
+  "required": [
+    "serial_no",
+    "qty",
+    "product_name",
+    "description",
+    "price",
+    "isactive"
+  ],
+  "additionalProperties": false
+}

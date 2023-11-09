@@ -5,10 +5,14 @@ module.exports = (mongoose) => {
     
     const OrderSlotsSchema = new Schema({
       
-      serial_no: { type: String },
+      serial_no: { 
+        type: String,
+        ref: "ProductSlot",
+        required: true,
+        index: true},
     
       user_id: { type: String },
-      qty: { type: Number },
+      qty: { type: Number,required: true },
      
     },
     {

@@ -1,0 +1,20 @@
+{
+  "title": "Order",
+  "description": "A Order",
+  "type": "object",
+  "properties": {
+    "serial_no":{
+      "description": "order serial no.",
+      "type": "string"
+    },
+    "qty":{
+      "description": "order quantity",
+      "type": "number"
+    }
+  },
+  "required": [
+    "serial_no",
+    "qty"
+  ],
+  "additionalProperties": false
+}
