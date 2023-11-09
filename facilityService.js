@@ -37,9 +37,11 @@ const OrderController = require("./controllers/order")
 app.post("/api/v1/order", handlerExport(
   OrderController.createOrder({
     OrderModel: ModelManager.get('Order'),
+    ProductModel: ModelManager.get('Product'),
     PaginationManager
   }), mongoose,JSON.parse(fs.readFileSync('./schema-validators/create-order.json')))
 );
+
 
 const ProductController = require("./controllers/product")
 
@@ -47,7 +49,7 @@ app.post("/api/v1/product", handlerExport(
   ProductController.createProduct({
     ProductModel: ModelManager.get('Product'),
     PaginationManager
-  }), mongoose,JSON.parse(fs.readFileSync('./schema-validators/create-order.json')))
+  }), mongoose,JSON.parse(fs.readFileSync('./schema-validators/create-product.json')))
 );
 
 
