@@ -90,4 +90,38 @@ module.exports.createOrder = ({ OrderModel, ProductModel}) => async (event) => {
   }
 }
 
+module.exports.cancelledOrder = ({ OrderModel, ProductModel}) => async (event) => {
+  try {
+    console.log({service: "order-service", logMessage: "cancelledOrder API initialised", stage: event.requestContext.stage});
+
+    const payload = JSON.parse(event.body)
+
+    const order = await OrderModel.find({_id:payload.order_id})
+  
+    
+    //for product Qty
+    const product = await ProductModel.find({_id:order.product_id})
+    // 
+    let productQty = product.qty;
+    let orderQty = order.qty
+    //let originalQuantity = productQty + orderQty
+    let originalQuantity = productQty + orderQty
+   // for update qty
+   const cancelOrder = await ProductModel.updateMany({product_id:order.product_id},{ $set: { qty :originalQuantity }})
+    //product = 5 , order cancelled => remove order record from collection
+   const cancelledOrder = await OrderModel.delete({_id:order._id})
+    return {
+      status: 200,
+      body: {message:"order cancelled successffully"}
+    }
+  } catch (err) {
+    console.log({service: "facility-service", requestBody: JSON.parse(event.body), logMessage: {message:err.message, api: 'cancelledOrder'}, status: "400", stage: event.requestContext.stage});
+    return {
+      status: 400,
+      body: { message: err.message }
+    }
+  }
+}
+
+
 

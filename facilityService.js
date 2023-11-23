@@ -41,6 +41,15 @@ app.post("/api/v1/order", handlerExport(
   }), mongoose,JSON.parse(fs.readFileSync('./schema-validators/create-order.json')))
 );
 
+//cancelled order
+app.post("/api/v1/cancelOrder", handlerExport(
+  OrderController.cancelledOrder({
+    OrderModel: ModelManager.get('Order'),
+    ProductModel: ModelManager.get('Product'),
+    PaginationManager
+  }), mongoose)
+);
+
 
 const ProductController = require("./controllers/product")
 //this api add new product and serial no. shoud be unique to add product
